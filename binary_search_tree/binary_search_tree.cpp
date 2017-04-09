@@ -1,13 +1,21 @@
 #include "binary_search_tree.hpp"
 
 
-BinarySearchTree::Node::Node(KeyType key)
-	: m_subtreeNodeCount(0),
+BinarySearchTree::Node::Node(KeyType key, unsigned long long nodeHeight)
+	:
+	m_nodeHeight(nodeHeight),
+	m_subtreeNodeCount(0),
 	m_key(key),
 	m_left(nullptr),
 	m_right(nullptr)
 {
+	if (nodeHeight > s_treeHeight)
+	{
+		s_treeHeight = nodeHeight;
+	}
 }
+
+unsigned long long BinarySearchTree::Node::s_treeHeight = 0;
 
 inline unsigned long long BinarySearchTree::Node::subtreeNodeCount() const
 {
@@ -39,6 +47,18 @@ BinarySearchTree::BinarySearchTree()
 {
 }
 
+unsigned long long BinarySearchTree::size()
+{
+	if (m_root)
+	{
+		return m_root->subtreeNodeCount() + 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 void BinarySearchTree::put(const KeyType& key)
 {
 	if (m_root.get())
@@ -48,26 +68,21 @@ void BinarySearchTree::put(const KeyType& key)
 		while (currentNode)
 		{
 			parentNode = currentNode;
+			parentNode->incSubtreeNodeCount();
 			if (key > currentNode->key())
 			{
-				if (currentNode->right())
+				currentNode = currentNode->right();
+				if (!currentNode)
 				{
-					currentNode = currentNode->right();
-				}
-				else
-				{
-					parentNode->setRight(std::make_unique<Node>(key));
+					parentNode->setRight(std::make_unique<Node>(key, parentNode->getNodeHeight() + 1));
 				}
 			}
 			else
 			{
-				if (currentNode->left())
+				currentNode = currentNode->left();
+				if (!currentNode)
 				{
-					currentNode = currentNode->left();
-				}
-				else
-				{
-					parentNode->setLeft(std::make_unique<Node>(key));
+					parentNode->setLeft(std::make_unique<Node>(key, parentNode->getNodeHeight() + 1));
 				}
 			}
 		}
@@ -76,4 +91,30 @@ void BinarySearchTree::put(const KeyType& key)
 	{
 		m_root = std::make_unique<Node>(key);
 	}
+}
+
+void BinarySearchTree::keysImpl(Node* currentNode, std::vector<const KeyType&>& keys, const KeyType& start, const KeyType& end)
+{
+	if (currentNode->key() > start)
+	{
+		keysImpl(currentNode->left(), keys, start, end);
+	}
+	if (currentNode->key() < end)
+	{
+		keysImpl(currentNode->right(), keys, start, end);
+	}
+}
+
+std::vector<const KeyType&> BinarySearchTree::keys(const KeyType& start, const KeyType& end)
+{
+	if (start > end)
+	{
+		return std::vector<const KeyType&>();
+	}
+
+	std::vector<const KeyType&> keys;
+
+	keysImpl(m_root.get(), keys, start, end);
+
+	return keys;
 }
