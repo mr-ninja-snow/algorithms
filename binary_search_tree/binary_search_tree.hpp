@@ -47,15 +47,18 @@ public:
 	unsigned long long height() const { return Node::getTreeHeight(); }
 	void put(const KeyType& key);
 
-	std::vector<const KeyType&> keys(const KeyType& start, const KeyType& end); // return keys in a given range
-	void keysImpl(Node* currentNode, std::vector<const KeyType&>& keys, const KeyType& start, const KeyType& end);
-//
-//	void min();
-//	void max();
-//	void floor();
-//	void ceiling();
+	std::vector<KeyType> keys(const KeyType& start, const KeyType& end); // return keys in a given range
+	void keysImpl(Node* currentNode, std::vector<KeyType>& keys, const KeyType& start, const KeyType& end);
+
+	KeyType min();
+	KeyType max();
+
+	KeyType floor();
+	KeyType ceiling();
+
 //	void select();
 //	void rank();
+
 //	void deleteMin();
 //	void deleteMax();
 

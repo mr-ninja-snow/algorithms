@@ -93,28 +93,77 @@ void BinarySearchTree::put(const KeyType& key)
 	}
 }
 
-void BinarySearchTree::keysImpl(Node* currentNode, std::vector<const KeyType&>& keys, const KeyType& start, const KeyType& end)
+void BinarySearchTree::keysImpl(Node* currentNode, std::vector<KeyType>& keys, const KeyType& start, const KeyType& end)
 {
 	if (currentNode->key() > start)
 	{
-		keysImpl(currentNode->left(), keys, start, end);
+		if (currentNode->left())
+		{
+			keysImpl(currentNode->left(), keys, start, end);
+		}
+		if (currentNode->key() < end)
+		{
+			keys.push_back(currentNode->key());
+		}
 	}
-	if (currentNode->key() < end)
+	
+	if (currentNode->key() == start || currentNode->key() == end)
+	{
+		keys.push_back(currentNode->key());
+	}
+
+	if (currentNode->key() < end && currentNode->right())
 	{
 		keysImpl(currentNode->right(), keys, start, end);
 	}
 }
 
-std::vector<const KeyType&> BinarySearchTree::keys(const KeyType& start, const KeyType& end)
+std::vector<KeyType> BinarySearchTree::keys(const KeyType& start, const KeyType& end)
 {
 	if (start > end)
 	{
-		return std::vector<const KeyType&>();
+		return std::vector<KeyType>();
 	}
 
-	std::vector<const KeyType&> keys;
+	std::vector<KeyType> keys;
 
 	keysImpl(m_root.get(), keys, start, end);
 
 	return keys;
+}
+
+KeyType BinarySearchTree::min()
+{
+	Node* parentNode;
+	auto* currentNode = m_root.get();
+	while (currentNode)
+	{
+		parentNode = currentNode;
+		currentNode = currentNode->left();
+	}
+
+	return parentNode->key();
+}
+
+KeyType BinarySearchTree::max()
+{
+	Node* parentNode;
+	auto* currentNode = m_root.get();
+	while (currentNode)
+	{
+		parentNode = currentNode;
+		currentNode = currentNode->right();
+	}
+
+	return parentNode->key();
+}
+
+KeyType BinarySearchTree::floor()
+{
+
+}
+
+KeyType BinarySearchTree::ceiling()
+{
+
 }
