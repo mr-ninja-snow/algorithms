@@ -29,6 +29,10 @@ int main(int argc, char *argv[])
 	std::cout << "bst.min()" << bst.min() << "\n";
 	std::cout << "bst.max()" << bst.max() << "\n";
 
+	std::cout << "bst.floor(C)" << bst.floor('C') << " - A\n";
+	std::cout << "bst.floor(B)" << bst.floor('B') << " - A\n";
+	std::cout << "bst.floor(E)" << bst.floor('E') << " - D\n";
+
 	getRange(bst, 'C', 'K');
 
 	getRange(bst, 'K', 'C');

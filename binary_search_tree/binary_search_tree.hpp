@@ -53,8 +53,8 @@ public:
 	KeyType min();
 	KeyType max();
 
-	KeyType floor();
-	KeyType ceiling();
+	KeyType floor(KeyType key);
+	KeyType ceiling(KeyType key);
 
 //	void select();
 //	void rank();
