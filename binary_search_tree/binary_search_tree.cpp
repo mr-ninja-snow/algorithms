@@ -189,6 +189,10 @@ KeyType BinarySearchTree::floor(KeyType key, Node* currentNode)
 	if (currentNode)
 	{
 		KeyType resultKey = floor(key, currentNode);
+		if (currentKey > key && resultKey <= key)
+		{
+			return resultKey;
+		}
 		if (resultKey > currentKey && resultKey < key)
 		{
 			currentKey = resultKey;

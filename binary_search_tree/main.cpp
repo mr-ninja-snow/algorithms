@@ -32,6 +32,8 @@ int main(int argc, char *argv[])
 	std::cout << "bst.floor(C)" << bst.floor('C') << " - A\n";
 	std::cout << "bst.floor(B)" << bst.floor('B') << " - A\n";
 	std::cout << "bst.floor(E)" << bst.floor('E') << " - D\n";
+	std::cout << "bst.floor(J)" << bst.floor('J') << " - K\n";
+	std::cout << "bst.floor(I)" << bst.floor('I') << " - H\n";
 
 	getRange(bst, 'C', 'K');
 
