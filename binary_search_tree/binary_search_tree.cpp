@@ -158,31 +158,44 @@ KeyType BinarySearchTree::max()
 	return parentNode->key();
 }
 
-KeyType BinarySearchTree::floor(KeyType key)
+KeyType BinarySearchTree::floor(KeyType key, Node* currentNode)
 {
-	Node* parentNode;
-	auto* currentNode = m_root.get();
-	while (currentNode)
+	if (currentNode == nullptr)
 	{
-		parentNode = currentNode;
+		currentNode = m_root.get();
+	}
 
-		if (currentNode->key() > key)
-		{
-			currentNode = currentNode->left();
-			continue;
-		}
+	KeyType currentKey = currentNode->key();
+
+	if (currentNode->key() > key)
+	{
+		currentNode = currentNode->left();
+	}
+	else
+	{
 		if (currentNode->key() < key)
 		{
 			currentNode = currentNode->right();
-			continue;
 		}
-		if (currentNode->key() == key)
+		else
 		{
-			currentNode = currentNode->left();
+			if (currentNode->key() == key)
+			{
+				currentNode = currentNode->left();
+			}
 		}
 	}
 
-	return parentNode->key();
+	if (currentNode)
+	{
+		KeyType resultKey = floor(key, currentNode);
+		if (resultKey > currentKey && resultKey < key)
+		{
+			currentKey = resultKey;
+		}
+	}
+
+	return currentKey;
 }
 
 KeyType BinarySearchTree::ceiling(KeyType key)

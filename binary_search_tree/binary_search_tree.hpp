@@ -53,7 +53,7 @@ public:
 	KeyType min();
 	KeyType max();
 
-	KeyType floor(KeyType key);
+	KeyType floor(KeyType key, Node* currentNode = nullptr);
 	KeyType ceiling(KeyType key);
 
 //	void select();
