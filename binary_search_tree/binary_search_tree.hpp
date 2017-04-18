@@ -54,7 +54,7 @@ public:
 	KeyType max();
 
 	KeyType floor(KeyType key, Node* currentNode = nullptr);
-	KeyType ceiling(KeyType key);
+	KeyType ceiling(KeyType key, Node* currentNode = nullptr);
 
 //	void select();
 //	void rank();

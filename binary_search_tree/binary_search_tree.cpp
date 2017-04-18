@@ -197,12 +197,61 @@ KeyType BinarySearchTree::floor(KeyType key, Node* currentNode)
 		{
 			currentKey = resultKey;
 		}
+		if (currentKey == key && resultKey < key)
+		{
+			return resultKey;
+		}
 	}
 
 	return currentKey;
 }
 
-KeyType BinarySearchTree::ceiling(KeyType key)
+KeyType BinarySearchTree::ceiling(KeyType key, Node* currentNode)
 {
-	return key;
+	if (currentNode == nullptr)
+	{
+		currentNode = m_root.get();
+	}
+
+	KeyType currentKey = currentNode->key();
+
+	if (currentNode->key() > key)
+	{
+		currentNode = currentNode->right();
+	}
+	else
+	{
+		if (currentNode->key() < key)
+		{
+			currentNode = currentNode->left();
+		}
+		else
+		{
+			if (currentNode->key() == key)
+			{
+				currentNode = currentNode->right();
+			}
+		}
+	}
+
+	if (currentNode)
+	{
+		KeyType resultKey = ceiling(key, currentNode);
+		if (currentKey < key && resultKey >= key)
+		{
+			return resultKey;
+		}
+
+		if (resultKey < currentKey && resultKey > key)
+		{
+			currentKey = resultKey;
+		}
+
+		if (currentKey == key && resultKey > key)
+		{
+			return resultKey;
+		}
+	}
+
+	return currentKey;
 }
