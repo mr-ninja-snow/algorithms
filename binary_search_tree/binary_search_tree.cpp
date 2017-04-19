@@ -206,6 +206,25 @@ KeyType BinarySearchTree::floor(KeyType key, Node* currentNode)
 	return currentKey;
 }
 
+/*KeyType BinarySearchTree::ceilingFind(KeyType key, Node* currentNode)
+{
+	if (currentNode->key() == key)
+	{
+		
+	}
+	else
+	{
+		if (currentNode->key() > key)
+		{
+			currentNode = currentNode->left();
+		}
+		else
+		{
+
+		}
+	}
+}*/
+
 KeyType BinarySearchTree::ceiling(KeyType key, Node* currentNode)
 {
 	if (currentNode == nullptr)
@@ -214,8 +233,50 @@ KeyType BinarySearchTree::ceiling(KeyType key, Node* currentNode)
 	}
 
 	KeyType currentKey = currentNode->key();
+	KeyType resultKey = currentNode->key();
 
-	if (currentNode->key() > key)
+	if (currentNode->key() == key)
+	{
+		if (currentNode->right())
+		{
+			resultKey = ceiling(key, currentNode->right());
+		}
+	}
+	else
+	{
+		if (currentNode->key() > key)
+		{
+			if (currentNode->left())
+			{
+				resultKey = ceiling(key, currentNode->left());
+			}
+		}
+		else
+		{
+			if (currentNode->right())
+			{
+				resultKey = ceiling(key, currentNode->right());
+			}
+		}
+	}
+
+	if (currentKey < key && resultKey >= key)
+	{
+		return resultKey;
+	}
+
+	if (resultKey < currentKey && resultKey > key)
+	{
+		currentKey = resultKey;
+	}
+
+	if (currentKey == key && resultKey > key)
+	{
+		return resultKey;
+	}
+
+
+	/*if (currentNode->key() > key)
 	{
 		currentNode = currentNode->right();
 	}
@@ -252,6 +313,6 @@ KeyType BinarySearchTree::ceiling(KeyType key, Node* currentNode)
 			return resultKey;
 		}
 	}
-
+	*/
 	return currentKey;
 }
