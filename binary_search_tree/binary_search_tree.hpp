@@ -20,9 +20,20 @@ class BinarySearchTree
 
 		Node* left() const;
 		void setLeft(std::unique_ptr<Node>&& node);
+		
+		void removeLeft()
+		{ 
+			std::unique_ptr<Node> node = std::move(m_left->m_right);
+			m_left = std::move(node);
+		}
 
 		Node* right() const;
 		void setRight(std::unique_ptr<Node>&& node);
+		void removeRight()
+		{
+			std::unique_ptr<Node> node = std::move(m_right->m_left);
+			m_right = std::move(node);
+		}
 		
 		unsigned long long getNodeHeight() const { return m_nodeHeight; }
 
@@ -56,11 +67,14 @@ public:
 	KeyType floor(KeyType key, Node* currentNode = nullptr);
 	KeyType ceiling(KeyType key, Node* currentNode = nullptr);
 
-//	void select();
-//	void rank();
+	unsigned int rank(KeyType key, Node* currentNode = nullptr, Node* parentNode = nullptr);
+	
+	KeyType select(unsigned int rankOfKey);
+	KeyType selectImpl(unsigned int rankOfKey, Node* currentNode, unsigned int currentRank);
 
-//	void deleteMin();
-//	void deleteMax();
+	void deleteMin();
+	void deleteMax();
+//	void delete(KeyType key);
 
 private:
 	std::unique_ptr<Node> m_root;

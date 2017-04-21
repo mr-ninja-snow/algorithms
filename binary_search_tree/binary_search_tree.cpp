@@ -274,45 +274,233 @@ KeyType BinarySearchTree::ceiling(KeyType key, Node* currentNode)
 	{
 		return resultKey;
 	}
+	return currentKey;
+}
 
-
-	/*if (currentNode->key() > key)
+unsigned int BinarySearchTree::rank(KeyType key, Node* currentNode, Node* parentNode)
+{
+	if (currentNode == nullptr)
 	{
-		currentNode = currentNode->right();
+		currentNode = m_root.get();
+	}
+
+	unsigned int res = 0;
+
+	if (currentNode->key() == key)
+	{
+		res = 1;
+		if (currentNode->left())
+		{
+			res += currentNode->left()->subtreeNodeCount() + 1;
+		}
+		return res;
 	}
 	else
 	{
-		if (currentNode->key() < key)
+		if (currentNode->key() > key)
 		{
-			currentNode = currentNode->left();
+			if (currentNode->left())
+			{
+				return rank(key, currentNode->left(), nullptr);
+			}
 		}
 		else
 		{
-			if (currentNode->key() == key)
+			if (currentNode->right())
 			{
-				currentNode = currentNode->right();
+				if (currentNode->left())
+				{
+					return currentNode->left()->subtreeNodeCount() + 2 + rank(key, currentNode->right(), currentNode);
+				}
+				else
+				{
+					return 1 + rank(key, currentNode->right(), currentNode);
+				}
 			}
 		}
 	}
+	return 0;
+}
 
-	if (currentNode)
+KeyType BinarySearchTree::select(unsigned int rankOfKey)
+{
+	Node* currentNode = m_root.get();
+
+	if (m_root->subtreeNodeCount() + 1 < rankOfKey || rankOfKey < 1)
 	{
-		KeyType resultKey = ceiling(key, currentNode);
-		if (currentKey < key && resultKey >= key)
+		return '?';
+	}
+
+	unsigned int currentRank = 0;
+
+	if (currentNode->left())
+	{
+		currentRank = currentNode->left()->subtreeNodeCount() + 1 + 1;
+	}
+	else
+	{
+		currentRank = 1;
+	}
+
+	if (currentRank == rankOfKey)
+	{
+		return currentNode->key();
+	}
+
+	if (currentRank > rankOfKey)
+	{
+		unsigned int newRank = currentRank;
+
+		if (currentNode->left()->right())
 		{
-			return resultKey;
+			newRank -= currentNode->left()->right()->subtreeNodeCount() + 1;
 		}
 
-		if (resultKey < currentKey && resultKey > key)
-		{
-			currentKey = resultKey;
-		}
+		newRank -= 1; // for the cur node
 
-		if (currentKey == key && resultKey > key)
+		return selectImpl(rankOfKey, currentNode->left(), newRank);
+	}
+	else
+	{
+		unsigned int newRank = currentRank;
+
+
+		if (currentNode->right())
 		{
-			return resultKey;
+			if (currentNode->right()->left())
+			{
+				newRank += currentNode->right()->left()->subtreeNodeCount() + 1;
+			}
+
+			newRank += 1; // for the next node
+
+			return selectImpl(rankOfKey, currentNode->right(), newRank);
 		}
 	}
-	*/
-	return currentKey;
+
+	return '?';
+}
+
+KeyType BinarySearchTree::selectImpl(unsigned int rankOfKey, Node* currentNode, unsigned int currentRank)
+{
+	if (currentRank == rankOfKey)
+	{
+		return currentNode->key();
+	}
+
+	if (currentRank > rankOfKey)
+	{
+		unsigned int newRank = currentRank;
+
+		if (currentNode->left())
+		{
+			if (currentNode->left()->right())
+			{
+				newRank -= currentNode->left()->right()->subtreeNodeCount() + 1;
+			}
+		}
+
+		newRank -= 1; // for the cur node
+
+		return selectImpl(rankOfKey, currentNode->left(), newRank);
+	}
+	else
+	{
+		unsigned int newRank = currentRank;
+
+
+		if (currentNode->right())
+		{
+			if (currentNode->right()->left())
+			{
+				newRank += currentNode->right()->left()->subtreeNodeCount() + 1;
+			}
+
+			newRank += 1; // for the next node
+
+			return selectImpl(rankOfKey, currentNode->right(), newRank);
+		}
+	}
+
+	/*if (currentNode == nullptr)
+	{
+		currentNode = m_root.get();
+	}*/
+
+	/*if (currentNode->left())
+	{
+		currentRank += currentNode->left()->subtreeNodeCount() + 1;
+	}
+
+	if (currentRank == rankOfKey)
+	{
+		return currentNode->key();
+	}
+
+
+	if (currentRank > rankOfKey)
+	{
+		if (currentNode->left())
+		{
+			unsigned int rankToPass = currentNode->subtreeNodeCount();
+
+			if (currentNode->right())
+			{
+				rankToPass -= currentNode->right()->subtreeNodeCount() + 1;
+			}
+
+			if (currentNode->left()->right())
+			{
+				rankToPass -= currentNode->left()->right()->subtreeNodeCount() + 1;
+			}
+
+			return select(rankOfKey, currentNode->left(), currentRank - rankToPass);
+		}
+	}
+	else
+	{
+		if (currentNode->right())
+		{
+			return select(rankOfKey, currentNode->right(), currentRank + 1);
+		}
+	}*/
+
+	return '?';
+}
+
+void BinarySearchTree::deleteMin()
+{
+	Node* parentNode;
+	auto* currentNode = m_root.get();
+
+	while (true)
+	{	
+		if (currentNode->left())
+		{
+			parentNode = currentNode;
+			currentNode = currentNode->left();
+			continue;
+		}
+		break;
+	}
+
+	parentNode->removeLeft();
+}
+
+void BinarySearchTree::deleteMax()
+{
+	Node* parentNode;
+	auto* currentNode = m_root.get();
+	while (true)
+	{
+		if (currentNode->right())
+		{
+			parentNode = currentNode;
+			currentNode = currentNode->right();
+			continue;
+		}
+		break;
+	}
+
+	parentNode->removeRight();
 }

@@ -51,6 +51,31 @@ int main(int argc, char *argv[])
 	getRange(bst, 'K', 'C');
 	getRange(bst, 'A', 'A');
 
+	std::cout << "bst.rank(I)" << bst.rank('I') << " - 5\n";
+	std::cout << "bst.rank(A)" << bst.rank('A') << " - 1\n";
+	std::cout << "bst.rank(C)" << bst.rank('C') << " - 2\n";
+	std::cout << "bst.rank(H)" << bst.rank('H') << " - 4\n";
+	std::cout << "bst.rank(D)" << bst.rank('D') << " - 3\n";
+	std::cout << "bst.rank(K)" << bst.rank('K') << " - 7\n";
+	std::cout << "bst.rank(Y)" << bst.rank('Y') << " - 9\n";
+	std::cout << "bst.rank(Z)" << bst.rank('Z') << " - 10\n";
+	std::cout << "bst.rank(X)" << bst.rank('X') << " - 0\n";
+	
+	std::cout << "bst.select(I[5])" << bst.select(5) << " - I\n";
+	std::cout << "bst.select(A[1])" << bst.select(1) << " - A\n";
+	std::cout << "bst.select(C[2])" << bst.select(2) << " - C\n";
+	std::cout << "bst.select(H[4])" << bst.select(4) << " - H\n";
+	std::cout << "bst.select(D[3])" << bst.select(3) << " - D\n";
+	std::cout << "bst.select(K[7])" << bst.select(7) << " - K\n";
+	std::cout << "bst.select(Y[9])" << bst.select(9) << " - Y\n";
+	std::cout << "bst.select(Z[10])" << bst.select(10) << " - Z\n";
+	std::cout << "bst.select(X[0])" << bst.select(0) << " - X\n";
+
+	bst.deleteMin();
+	std::cout << "bst.min()" << bst.min() << "\n";
+
+	bst.deleteMax();
+	std::cout << "bst.max()" << bst.max() << "\n";
 
 	return 0;
 }
