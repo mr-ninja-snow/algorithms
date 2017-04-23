@@ -15,6 +15,7 @@ class BinarySearchTree
 
 		unsigned long long subtreeNodeCount() const;
 		void incSubtreeNodeCount() { m_subtreeNodeCount++; };
+		void decSubtreeNodeCount() { m_subtreeNodeCount--; };
 
 		const KeyType& key() const { return m_key; }
 
@@ -27,6 +28,12 @@ class BinarySearchTree
 			m_left = std::move(node);
 		}
 
+		void removeLeftAndAttachLeft()
+		{
+			std::unique_ptr<Node> node = std::move(m_left->m_left);
+			m_left = std::move(node);
+		}
+
 		Node* right() const;
 		void setRight(std::unique_ptr<Node>&& node);
 		void removeRight()
@@ -34,6 +41,15 @@ class BinarySearchTree
 			std::unique_ptr<Node> node = std::move(m_right->m_left);
 			m_right = std::move(node);
 		}
+
+		void removeRightAndAttachRight()
+		{
+			std::unique_ptr<Node> node = std::move(m_right->m_right);
+			m_right = std::move(node);
+		}
+
+		void removeLeftAndFixLinks();
+		void removeRightAndFixLinks();
 		
 		unsigned long long getNodeHeight() const { return m_nodeHeight; }
 
@@ -74,8 +90,10 @@ public:
 
 	void deleteMin();
 	void deleteMax();
-//	void delete(KeyType key);
+	void deleteKey(KeyType key);
 
 private:
+	void removeRoot();
+
 	std::unique_ptr<Node> m_root;
 };

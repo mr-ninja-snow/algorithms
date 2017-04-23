@@ -71,11 +71,34 @@ int main(int argc, char *argv[])
 	std::cout << "bst.select(Z[10])" << bst.select(10) << " - Z\n";
 	std::cout << "bst.select(X[0])" << bst.select(0) << " - X\n";
 
-	bst.deleteMin();
+	/*bst.deleteMin();
 	std::cout << "bst.min()" << bst.min() << "\n";
 
 	bst.deleteMax();
-	std::cout << "bst.max()" << bst.max() << "\n";
+	std::cout << "bst.max()" << bst.max() << "\n";*/
+
+	std::cout << "bst.select([1])" << bst.select(1) << "\n";
+	std::cout << "bst.select([2])" << bst.select(2) << "\n";
+	std::cout << "bst.select([3])" << bst.select(3) << "\n";
+	std::cout << "bst.select([4])" << bst.select(4) << "\n";
+	std::cout << "bst.select([5])" << bst.select(5) << "\n";
+	std::cout << "bst.select([6])" << bst.select(6) << "\n";
+	std::cout << "bst.select([7])" << bst.select(7) << "\n";
+	std::cout << "bst.select([8])" << bst.select(8) << "\n";
+	std::cout << "bst.select([9])" << bst.select(9) << "\n";
+	std::cout << "bst.select([10])" << bst.select(10) << "\n";
+
+	bst.deleteKey('D');
+
+	std::cout << "bst.select([1])" << bst.select(1) << "\n";
+	std::cout << "bst.select([2])" << bst.select(2) << "\n";
+	std::cout << "bst.select([3])" << bst.select(3) << "\n";
+	std::cout << "bst.select([4])" << bst.select(4) << "\n";
+	std::cout << "bst.select([5])" << bst.select(5) << "\n";
+	std::cout << "bst.select([6])" << bst.select(6) << "\n";
+	std::cout << "bst.select([7])" << bst.select(7) << "\n";
+	std::cout << "bst.select([8])" << bst.select(8) << "\n";
+	std::cout << "bst.select([9])" << bst.select(9) << "\n";
 
 	return 0;
 }

@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "binary_search_tree.hpp"
 
 
@@ -422,52 +424,11 @@ KeyType BinarySearchTree::selectImpl(unsigned int rankOfKey, Node* currentNode, 
 		}
 	}
 
-	/*if (currentNode == nullptr)
-	{
-		currentNode = m_root.get();
-	}*/
-
-	/*if (currentNode->left())
-	{
-		currentRank += currentNode->left()->subtreeNodeCount() + 1;
-	}
-
-	if (currentRank == rankOfKey)
-	{
-		return currentNode->key();
-	}
-
-
-	if (currentRank > rankOfKey)
-	{
-		if (currentNode->left())
-		{
-			unsigned int rankToPass = currentNode->subtreeNodeCount();
-
-			if (currentNode->right())
-			{
-				rankToPass -= currentNode->right()->subtreeNodeCount() + 1;
-			}
-
-			if (currentNode->left()->right())
-			{
-				rankToPass -= currentNode->left()->right()->subtreeNodeCount() + 1;
-			}
-
-			return select(rankOfKey, currentNode->left(), currentRank - rankToPass);
-		}
-	}
-	else
-	{
-		if (currentNode->right())
-		{
-			return select(rankOfKey, currentNode->right(), currentRank + 1);
-		}
-	}*/
-
 	return '?';
 }
 
+// won't work in an empty BST
+// won't work in a BST with one element
 void BinarySearchTree::deleteMin()
 {
 	Node* parentNode;
@@ -478,6 +439,7 @@ void BinarySearchTree::deleteMin()
 		if (currentNode->left())
 		{
 			parentNode = currentNode;
+			parentNode->decSubtreeNodeCount();
 			currentNode = currentNode->left();
 			continue;
 		}
@@ -487,6 +449,8 @@ void BinarySearchTree::deleteMin()
 	parentNode->removeLeft();
 }
 
+// won't work in an empty BST
+// won't work in a BST with one element
 void BinarySearchTree::deleteMax()
 {
 	Node* parentNode;
@@ -496,6 +460,7 @@ void BinarySearchTree::deleteMax()
 		if (currentNode->right())
 		{
 			parentNode = currentNode;
+			parentNode->decSubtreeNodeCount();
 			currentNode = currentNode->right();
 			continue;
 		}
@@ -503,4 +468,222 @@ void BinarySearchTree::deleteMax()
 	}
 
 	parentNode->removeRight();
+}
+
+void BinarySearchTree::deleteKey(KeyType key)
+{
+	std::vector<Node*> nodeToDec;
+	Node* parentNode = nullptr;
+	auto* currentNode = m_root.get();
+	bool wentLeft = true;
+	while (true)
+	{
+		if (currentNode->key() == key)
+		{
+			if (parentNode)
+			{
+				if(!currentNode->left() && !currentNode->right())
+				{
+					if (wentLeft)
+					{
+						parentNode->removeLeft();
+					}
+					else
+					{
+						parentNode->removeRight();
+					}
+					std::cout << "Deleted key\n";
+					break;
+				}
+
+				if (!currentNode->left() && currentNode->right())
+				{
+					if (wentLeft)
+					{
+						parentNode->removeLeft();
+					}
+					else
+					{
+						parentNode->removeRightAndAttachRight();
+					}
+					std::cout << "Deleted key\n";
+					break;
+				}
+
+				if (currentNode->left() && !currentNode->right())
+				{
+					if (wentLeft)
+					{
+						parentNode->removeLeftAndAttachLeft();
+					}
+					else
+					{
+						parentNode->removeRight();
+					}
+					std::cout << "Deleted key\n";
+					break;
+				}
+
+				if (wentLeft)
+				{
+					parentNode->removeLeftAndFixLinks();
+				}
+				else
+				{
+					parentNode->removeRightAndFixLinks();
+				}
+				std::cout << "Deleted key\n";
+				break;
+			}
+			else
+			{
+				removeRoot();
+			}
+		}
+		else
+		{
+			if (currentNode->key() > key)
+			{
+				if (currentNode->left())
+				{
+					nodeToDec.push_back(currentNode);
+					parentNode = currentNode;
+					wentLeft = true;
+					currentNode = currentNode->left();
+					continue;
+				}
+				else
+				{
+					std::cout << "Couldn't find this key\n";
+					return;
+				}
+			}
+			else
+			{
+				if (currentNode->right())
+				{
+					nodeToDec.push_back(currentNode);
+					parentNode = currentNode;
+					wentLeft = false;
+					currentNode = currentNode->right();
+					continue;
+				}
+				else
+				{
+					std::cout << "Couldn't find this key\n";
+					return;
+				}
+			}
+		}
+		break;
+	}
+
+
+	//
+	for (auto& node : nodeToDec)
+	{
+		node->decSubtreeNodeCount();
+	}
+}
+
+void BinarySearchTree::Node::removeLeftAndFixLinks()
+{
+
+	Node* parentNode = nullptr;
+	auto* currentNode = this->left()->right();
+	
+	if (!currentNode)
+	{
+		auto node = std::move(this->m_left->m_left);
+		this->m_left = std::move(node);
+		return;
+	}
+
+	while (true)
+	{
+		if (currentNode->left())
+		{
+			parentNode = currentNode;
+			currentNode = currentNode->left();
+			continue;
+		}
+		break;
+	}
+
+	if (!parentNode)
+	{
+		this->removeLeftAndAttachLeft();
+		return;
+	}
+
+	auto nodeToRM = std::move(this->m_left);
+
+	auto newSubRoot = std::move(parentNode->m_left);
+
+	auto newSubRootTail = std::move(newSubRoot->m_right);
+
+	parentNode->m_left = std::move(newSubRootTail);
+
+	newSubRoot->m_right = std::move(nodeToRM->m_right);
+	newSubRoot->m_left = std::move(nodeToRM->m_left);
+
+	this->m_left = std::move(newSubRoot);
+}
+
+void BinarySearchTree::Node::removeRightAndFixLinks()
+{
+	Node* parentNode = nullptr;
+	auto* currentNode = this->right()->right();
+
+	if (!currentNode)
+	{
+		auto node = std::move(this->m_right->m_left);
+		this->m_right = std::move(node);
+		return;
+	}
+
+	while (true)
+	{
+		if (currentNode->left())
+		{
+			parentNode = currentNode;
+			currentNode = currentNode->left();
+			continue;
+		}
+		break;
+	}
+
+	if (!parentNode)
+	{
+		std::unique_ptr<Node> node = std::move(m_right->m_right);
+		std::unique_ptr<Node> subLeft = std::move(m_right->m_left);
+
+		node->m_left = std::move(subLeft);
+
+		for (int i = 0; i < node->m_left->subtreeNodeCount() + 1; i++)
+		{
+			node->incSubtreeNodeCount();
+		}
+
+		m_right = std::move(node);
+		return;
+	}
+
+	auto nodeToRM = std::move(this->m_right);
+
+	auto newSubRoot = std::move(parentNode->m_left);
+
+	auto newSubRootTail = std::move(newSubRoot->m_right);
+
+	parentNode->m_left = std::move(newSubRootTail);
+
+	newSubRoot->m_right = std::move(nodeToRM->m_right);
+	newSubRoot->m_left = std::move(nodeToRM->m_left);
+
+	this->m_right = std::move(newSubRoot);
+}
+
+void BinarySearchTree::removeRoot()
+{
+	throw 1;
 }
