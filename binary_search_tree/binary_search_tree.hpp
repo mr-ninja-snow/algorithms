@@ -42,6 +42,11 @@ class BinarySearchTree
 			m_right = std::move(node);
 		}
 
+		std::unique_ptr<Node> detachRight()
+		{
+			return std::move(m_right);
+		}
+
 		void removeRightAndAttachRight()
 		{
 			std::unique_ptr<Node> node = std::move(m_right->m_right);
@@ -73,6 +78,8 @@ public:
 	unsigned long long size();
 	unsigned long long height() const { return Node::getTreeHeight(); }
 	void put(const KeyType& key);
+
+	Node* getRoot() { return m_root.get(); }
 
 	std::vector<KeyType> keys(const KeyType& start, const KeyType& end); // return keys in a given range
 	void keysImpl(Node* currentNode, std::vector<KeyType>& keys, const KeyType& start, const KeyType& end);

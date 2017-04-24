@@ -685,5 +685,10 @@ void BinarySearchTree::Node::removeRightAndFixLinks()
 
 void BinarySearchTree::removeRoot()
 {
-	throw 1;
+	std::unique_ptr<Node> tmpParentNode = std::make_unique<Node>('?');
+
+	tmpParentNode->setRight(std::move(m_root));
+	tmpParentNode->removeRightAndFixLinks();
+
+	m_root = std::move(tmpParentNode->detachRight());
 }

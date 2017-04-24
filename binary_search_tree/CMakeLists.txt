@@ -9,6 +9,7 @@ set(ALL_FILES
 	main.cpp
 	binary_search_tree.cpp
 	binary_search_tree.hpp
+	catch.hpp
 )
 
 # Add a compiler flag

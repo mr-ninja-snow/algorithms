@@ -1,17 +1,12 @@
 #include <iostream>
 #include "binary_search_tree.hpp"
 
-void getRange(BinarySearchTree& bst, const KeyType& start, const KeyType& end)
-{
-	std::cout << "Key in range\n";
-	auto res = bst.keys(start, end);
-	for (const auto key : bst.keys(start, end))
-	{
-		std::cout << "key - " << key << "\n";
-	}
-}
 
-int main(int argc, char *argv[])
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
+
+
+TEST_CASE("Empty Grid size 2 by 2 Test")
 {
 	BinarySearchTree bst;
 
@@ -26,79 +21,149 @@ int main(int argc, char *argv[])
 	bst.put('H');
 	bst.put('Z');
 
-	std::cout <<"bst.size()" << bst.size() << "\n" ;
-	std::cout <<"bst.treeHight()" << bst.height() << "\n" ;
+	SECTION("push 10 key on to bst and get size 10")
+	{
+		REQUIRE(bst.size() == 10);
+	}
 
-	std::cout << "bst.min()" << bst.min() << "\n";
-	std::cout << "bst.max()" << bst.max() << "\n";
+	SECTION("push 10 key on to bst and get hight")
+	{
+		REQUIRE(bst.height() == 4);
+	}
 
-	std::cout << "bst.floor(C)" << bst.floor('C') << " - A\n";
-	std::cout << "bst.floor(B)" << bst.floor('B') << " - A\n";
-	std::cout << "bst.floor(E)" << bst.floor('E') << " - D\n";
-	std::cout << "bst.floor(J)" << bst.floor('J') << " - I\n";
-	std::cout << "bst.floor(I)" << bst.floor('I') << " - H\n";
-	std::cout << "bst.floor(Z)" << bst.floor('Z') << " - Y\n\n\n";
+	SECTION("push 10 key on to bst and get max key")
+	{
+		REQUIRE(bst.max() == 'Z');
+	}
 
-	std::cout << "bst.ceiling(C)" << bst.ceiling('C') << " - D\n";
-	std::cout << "bst.ceiling(B)" << bst.ceiling('B') << " - C\n";
-	std::cout << "bst.ceiling(E)" << bst.ceiling('E') << " - H\n";
-	std::cout << "bst.ceiling(J)" << bst.ceiling('J') << " - K\n";
-	std::cout << "bst.ceiling(I)" << bst.ceiling('I') << " - J\n";
-	std::cout << "bst.ceiling(Z)" << bst.ceiling('Z') << " - Z\n";
+	SECTION("push 10 key on to bst and get min")
+	{
+		REQUIRE(bst.min() == 'A');
+	}
 
-	getRange(bst, 'C', 'K');
+	SECTION("bst.floor(C) = A")
+	{
+		REQUIRE(bst.floor('C') == 'A');
+	}
 
-	getRange(bst, 'K', 'C');
-	getRange(bst, 'A', 'A');
+	SECTION("bst.floor(B) = A")
+	{
+		REQUIRE(bst.floor('B') == 'A');
+	}
 
-	std::cout << "bst.rank(I)" << bst.rank('I') << " - 5\n";
-	std::cout << "bst.rank(A)" << bst.rank('A') << " - 1\n";
-	std::cout << "bst.rank(C)" << bst.rank('C') << " - 2\n";
-	std::cout << "bst.rank(H)" << bst.rank('H') << " - 4\n";
-	std::cout << "bst.rank(D)" << bst.rank('D') << " - 3\n";
-	std::cout << "bst.rank(K)" << bst.rank('K') << " - 7\n";
-	std::cout << "bst.rank(Y)" << bst.rank('Y') << " - 9\n";
-	std::cout << "bst.rank(Z)" << bst.rank('Z') << " - 10\n";
-	std::cout << "bst.rank(X)" << bst.rank('X') << " - 0\n";
-	
-	std::cout << "bst.select(I[5])" << bst.select(5) << " - I\n";
-	std::cout << "bst.select(A[1])" << bst.select(1) << " - A\n";
-	std::cout << "bst.select(C[2])" << bst.select(2) << " - C\n";
-	std::cout << "bst.select(H[4])" << bst.select(4) << " - H\n";
-	std::cout << "bst.select(D[3])" << bst.select(3) << " - D\n";
-	std::cout << "bst.select(K[7])" << bst.select(7) << " - K\n";
-	std::cout << "bst.select(Y[9])" << bst.select(9) << " - Y\n";
-	std::cout << "bst.select(Z[10])" << bst.select(10) << " - Z\n";
-	std::cout << "bst.select(X[0])" << bst.select(0) << " - X\n";
+	SECTION("bst.floor(E) = D")
+	{
+		REQUIRE(bst.floor('E') == 'D');
+	}
 
-	/*bst.deleteMin();
-	std::cout << "bst.min()" << bst.min() << "\n";
+	SECTION("bst.floor(J) = I")
+	{
+		REQUIRE(bst.floor('J') == 'I');
+	}
 
-	bst.deleteMax();
-	std::cout << "bst.max()" << bst.max() << "\n";*/
+	SECTION("bst.floor(I) = H")
+	{
+		REQUIRE(bst.floor('I') == 'H');
+	}
 
-	std::cout << "bst.select([1])" << bst.select(1) << "\n";
-	std::cout << "bst.select([2])" << bst.select(2) << "\n";
-	std::cout << "bst.select([3])" << bst.select(3) << "\n";
-	std::cout << "bst.select([4])" << bst.select(4) << "\n";
-	std::cout << "bst.select([5])" << bst.select(5) << "\n";
-	std::cout << "bst.select([6])" << bst.select(6) << "\n";
-	std::cout << "bst.select([7])" << bst.select(7) << "\n";
-	std::cout << "bst.select([8])" << bst.select(8) << "\n";
-	std::cout << "bst.select([9])" << bst.select(9) << "\n";
-	std::cout << "bst.select([10])" << bst.select(10) << "\n";
+	SECTION("bst.floor(Z) = Y")
+	{
+		REQUIRE(bst.floor('Z') == 'Y');
+	}
 
-	bst.deleteKey('D');
+	SECTION("bst.ceiling('C') == 'D'")
+	{
+		REQUIRE(bst.ceiling('C') == 'D');
+	}
 
-	std::cout << "bst.select([1])" << bst.select(1) << "\n";
-	std::cout << "bst.select([2])" << bst.select(2) << "\n";
-	std::cout << "bst.select([3])" << bst.select(3) << "\n";
-	std::cout << "bst.select([4])" << bst.select(4) << "\n";
-	std::cout << "bst.select([5])" << bst.select(5) << "\n";
-	std::cout << "bst.select([6])" << bst.select(6) << "\n";
-	std::cout << "bst.select([7])" << bst.select(7) << "\n";
-	std::cout << "bst.select([8])" << bst.select(8) << "\n";
-	std::cout << "bst.select([9])" << bst.select(9) << "\n";
+	SECTION("bst.ceiling('B') == 'C'")
+	{
+		REQUIRE(bst.ceiling('B') == 'C');
+	}
 
-	return 0;
+	SECTION("bst.ceiling('E') == 'H'")
+	{
+		REQUIRE(bst.ceiling('E') == 'H');
+	}
+
+	SECTION("bst.ceiling('J') == 'K'")
+	{
+		REQUIRE(bst.ceiling('J') == 'K');
+	}
+
+	SECTION("bst.ceiling('I') == 'J'")
+	{
+		REQUIRE(bst.ceiling('I') == 'J');
+	}
+
+	SECTION("bst.ceiling('Z') == 'Z'")
+	{
+		REQUIRE(bst.ceiling('Z') == 'Z');
+	}
+
+	SECTION("bst.keys('C', 'K') == {'C', 'D', 'H', 'I', 'J', 'K'}")
+	{
+		std::vector<KeyType> ans = { 'C', 'D', 'H', 'I', 'J', 'K' };
+		REQUIRE(bst.keys('C', 'K') == ans);
+	}
+
+	SECTION("delMin and get min == C")
+	{
+		bst.deleteMin();
+		REQUIRE(bst.min() == 'C');
+	}
+
+	SECTION("get subNode count of root")
+	{
+		REQUIRE(bst.getRoot()->subtreeNodeCount() == 9);
+	}
+
+	SECTION("rm min and get subNode count of root")
+	{
+		bst.deleteMin();
+		REQUIRE(bst.getRoot()->subtreeNodeCount() == 8);
+	}
+
+	SECTION("rm 'A' get bst.keys('C', 'Z') == {'C', 'D', 'H', 'I', 'J', 'K', 'X', 'Y', 'Z'}")
+	{
+		std::vector<KeyType> ans = { 'C', 'D', 'H', 'I', 'J', 'K', 'X', 'Y', 'Z' };
+		bst.deleteKey('A');
+		REQUIRE(bst.keys('C', 'Z') == ans);
+	}
+
+	SECTION("rm 'D' get bst.keys('A', 'Z') == {'A', 'C', 'H', 'I', 'J', 'K', 'X', 'Y', 'Z'}")
+	{
+		std::vector<KeyType> ans = { 'A', 'C', 'H', 'I', 'J', 'K', 'X', 'Y', 'Z' };
+		bst.deleteKey('D');
+		REQUIRE(bst.keys('A', 'Z') == ans);
+	}
+
+	SECTION("rm 'D' and H get bst.keys('A', 'Z') == {'A', 'C', 'I', 'J', 'K', 'X', 'Y', 'Z'}")
+	{
+		std::vector<KeyType> ans = { 'A', 'C', 'I', 'J', 'K', 'X', 'Y', 'Z' };
+		bst.deleteKey('D');
+		bst.deleteKey('H');
+		REQUIRE(bst.keys('A', 'Z') == ans);
+	}
+
+	SECTION("rm 'Z' get bst.keys('A', 'Y') == {'A', 'C', 'D', 'H', 'I', 'J', 'K', 'X', 'Y'}")
+	{
+		std::vector<KeyType> ans = { 'A', 'C', 'D', 'H', 'I', 'J', 'K', 'X', 'Y' };
+		bst.deleteKey('Z');
+		REQUIRE(bst.keys('A', 'Y') == ans);
+	}
+
+	SECTION("rm 'K' get bst.keys('A', 'Z') == {'A', 'C', 'D', 'H', 'I', 'J', 'X', 'Y', 'Z'}")
+	{
+		std::vector<KeyType> ans = { 'A', 'C', 'D', 'H', 'I', 'J', 'X', 'Y', 'Z' };
+		bst.deleteKey('K');
+		REQUIRE(bst.keys('A', 'Z') == ans);
+	}
+
+	SECTION("rm 'I' get bst.keys('A', 'Z') == {'A', 'C', 'D', 'H', 'J', 'K', 'X', 'Y', 'Z'}")
+	{
+		std::vector<KeyType> ans = { 'A', 'C', 'D', 'H', 'J', 'K', 'X', 'Y', 'Z' };
+		bst.deleteKey('I');
+		REQUIRE(bst.keys('A', 'Z') == ans);
+	}
 }
